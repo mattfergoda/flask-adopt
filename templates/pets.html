@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Pets {% endblock %}
+
+{% block content %}
+
+<h1>Adopt a Pet</h1>
+
+<ul>
+  {% for pet in pets %}
+    <li>
+      {{ pet.name }}
+      {% if pet.available %}
+        <h3> - ' I'm Available! '</h3>
+      {% endif %}
+    </li>
+    <img src="{{pet.photo_url}}" class="img-thumbnail img-fluid w-25">
+
+  {% endfor %}
+</ul>
+
+{% endblock %}
