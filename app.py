@@ -2,10 +2,12 @@
 
 import os
 
-from flask import Flask, flash, request, render_template
+from flask import Flask, flash, request, render_template, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import connect_db, db, Pet
+from forms import AddPetForm
+
 
 app = Flask(__name__)
 
@@ -29,8 +31,46 @@ toolbar = DebugToolbarExtension(app)
 
 
 @app.get('/')
-def root():
+def show_homepage():
+    ''' show the homepage with list of pets '''
 
     pets = Pet.query.all()
 
     return render_template('pets.html', pets=pets)
+
+
+
+@app.route("/add", methods=["GET", "POST"])
+def add_pet_form():
+    """ shows and handles add pet form """
+
+    form = AddPetForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        species = form.species.data
+        photo_url = form.photo_url.data or ''
+        age = form.age.data
+        notes = form.notes.data or ''
+
+
+        # do stuff with data/insert to db
+        new_pet = Pet(
+            name=name,
+            species=species,
+            photo_url=photo_url,
+            age=age,
+            notes=notes)
+
+        db.session.add(new_pet)
+        db.session.commit()
+
+        flash(f"Added {name} to adoptable pets")
+        return redirect("/")
+
+    else:
+        return render_template(
+            "add_pet.html", form=form)
+
+
+
