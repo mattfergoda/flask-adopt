@@ -39,7 +39,7 @@ class Pet(db.Model):
     photo_url = db.Column(
         db.Text,
         nullable=False,
-        default = ""
+        default=""
     )
 
     age = db.Column(
@@ -53,12 +53,13 @@ class Pet(db.Model):
     notes = db.Column(
         db.Text,
         nullable=True
+        #TODO: default empty string
     )
 
     available = db.Column(
         db.Boolean,
         nullable=False,
-        default = True
+        default=True
     )
 
 
